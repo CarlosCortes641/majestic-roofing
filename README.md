@@ -27,6 +27,14 @@ Abre `http://localhost:5130`.
 
 **No activado:** CRM, email transaccional, ni envío real a la aseguradora.
 
+## Publicar (gratis en Render)
+
+1. Repo en GitHub: `CarlosCortes641/majestic-roofing`
+2. En [Render](https://dashboard.render.com/blueprint/new?repo=https://github.com/CarlosCortes641/majestic-roofing): Blueprint Name `majestic-roofing` → **Apply**
+3. Si falla por memoria (exit 139): en el servicio → **Manual Deploy** → **Clear build cache & deploy**
+
+El plan free se duerme sin tráfico; el primer request puede tardar ~30–60s.
+
 ## Prototipo de referencia
 
 https://majestic-roofing.jrricardo29.chatgpt.site
