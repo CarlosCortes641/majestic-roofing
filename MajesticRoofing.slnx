@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MajesticRoofing.Web/MajesticRoofing.Web.csproj" />
+  </Folder>
+</Solution>

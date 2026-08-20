@@ -1,0 +1,90 @@
+﻿@{
+    var title = ViewData["Title"] as string ?? Lang.T(
+        "Majestic Roofing | Roof Insurance Claims Charlotte & Rock Hill",
+        "Majestic Roofing | Reclamos de seguro de techo Charlotte y Rock Hill");
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var desc = Lang.T(
+        "Bilingual roof insurance claim documentation, free storm inspections, roof replacement, repairs, emergency tarping, gutters and fascia across Charlotte, NC and Rock Hill, SC.",
+        "Documentación bilingüe de reclamos de seguro de techo, inspecciones de tormenta gratis, reemplazo, reparaciones, tarps de emergencia, canaletas y fascia en Charlotte, NC y Rock Hill, SC.");
+    var isHome = Context.Request.Path == "/" || string.Equals(Context.Request.Path, "/Home", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(Context.Request.Path, "/Home/Index", StringComparison.OrdinalIgnoreCase);
+}
+<!DOCTYPE html>
+<html lang="@Lang.HtmlLang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@title</title>
+    <meta name="description" content="@desc" />
+    <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="skip-link" href="#main">@Lang.T("Skip to content", "Ir al contenido")</a>
+    <div class="sandbox-banner">
+        <div class="site-shell emergency-inner">
+            <span><strong>@Lang.T("Sandbox demo", "Demo sandbox")</strong> · @Lang.T("Leads stay in memory only.", "Los leads solo viven en memoria.") · <a href="/ops">@Lang.T("Internal leads", "Leads internos")</a></span>
+        </div>
+    </div>
+    <div class="emergency-bar">
+        <div class="site-shell emergency-inner">
+            <span>@Lang.T("Active roof leak or storm damage?", "¿Gota activa o daño por tormenta?")</span>
+            <a href="@(isHome ? "#emergency" : "/#emergency")">@Lang.T("Emergency tarp details", "Detalles del tarp de emergencia") <span aria-hidden="true">↗</span></a>
+        </div>
+    </div>
+    <header class="site-header">
+        <div class="site-shell header-inner">
+            <a class="brand" href="@(isHome ? "#top" : "/")" aria-label="Majestic Roofing home">
+                <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>MAJESTIC</strong><small>ROOFING, INC.</small></span>
+            </a>
+            <nav aria-label="@Lang.T("Primary navigation", "Navegación principal")">
+                <a href="@(isHome ? "#services" : "/#services")">@Lang.T("Services", "Servicios")</a>
+                <a href="@(isHome ? "#planner" : "/#planner")">@Lang.T("Price planner", "Calculadora")</a>
+                <a href="/roof-insurance-claim-charlotte-nc">@Lang.T("Storm damage", "Daño por tormenta")</a>
+            </nav>
+            <div class="header-actions">
+                <a class="language-toggle" href="@Url.Action("Set", "Language", new { code = Lang.OtherCode, returnUrl })">@Lang.ToggleLabel</a>
+                <a class="button button-small" href="@(isHome ? "#contact" : "/#contact")">@Lang.T("Get help", "Pedir ayuda")</a>
+            </div>
+        </div>
+    </header>
+
+    <main lang="@Lang.HtmlLang">
+        @if (TempData["LeadOk"] != null)
+        {
+            <div class="site-shell" style="padding-top:1rem">
+                <p class="form-note" style="background:#e8f5e9;padding:0.85rem 1rem;border-radius:8px;color:#1b4332">
+                    @Lang.T("Thanks — Majestic received your request. This sandbox only stores it in memory.", "Gracias — Majestic recibió tu solicitud. Este sandbox solo la guarda en memoria.")
+                </p>
+            </div>
+        }
+        @if (TempData["LeadError"] != null)
+        {
+            <div class="site-shell" style="padding-top:1rem">
+                <p class="form-note" style="background:#fdecea;padding:0.85rem 1rem;border-radius:8px;color:#7f1d1d">
+                    @Lang.T("Please complete the required fields and try again.", "Completa los campos requeridos e inténtalo de nuevo.")
+                </p>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="site-shell footer-top">
+            <a class="brand brand-footer" href="/">
+                <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+                <span><strong>MAJESTIC</strong><small>ROOFING, INC.</small></span>
+            </a>
+            <p>@Lang.T("Roof replacement • repairs • storm documentation • emergency tarping • gutters • fascia · roof insurance claim documentation", "Reemplazo • reparaciones • documentación de tormentas • tarps de emergencia • canaletas • fascia · documentación de reclamos")</p>
+            <a class="footer-phone" href="tel:@SiteInfo.PhoneTel">@SiteInfo.PhoneDisplay</a>
+        </div>
+        <div class="site-shell footer-bottom">
+            <span>© @DateTime.UtcNow.Year Majestic Roofing, Inc.</span>
+            <span>Charlotte, NC · Rock Hill, SC · @Lang.T("Coverage confirmed by address", "Cobertura confirmada por dirección") · <a href="/ops">Ops</a></span>
+        </div>
+    </footer>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

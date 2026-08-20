@@ -1,0 +1,59 @@
+@model IReadOnlyList<MajesticRoofing.Web.Demo.LeadRecord>
+@{
+    ViewData["Title"] = Lang.T("Ops · Leads (sandbox)", "Ops · Leads (sandbox)");
+}
+<section class="section">
+    <div class="site-shell" style="padding-block:3rem">
+        <p class="eyebrow">@Lang.T("Internal board", "Tablero interno")</p>
+        <h1>@Lang.T("Leads in memory", "Leads en memoria")</h1>
+        <p>@Lang.T("Demo only. Restarting the app clears this list. No email is sent.", "Solo demo. Reiniciar la app borra esta lista. No se envía correo.")</p>
+        @if (Model.Count == 0)
+        {
+            <p>@Lang.T("No leads yet. Submit the contact form on the site.", "Todavía no hay leads. Envía el formulario de contacto.")</p>
+        }
+        else
+        {
+            <div style="overflow:auto;margin-top:1.5rem">
+                <table style="width:100%;border-collapse:collapse;font-size:0.95rem">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;padding:0.6rem;border-bottom:1px solid #ccc">ID</th>
+                            <th style="text-align:left;padding:0.6rem;border-bottom:1px solid #ccc">@Lang.T("When", "Cuándo")</th>
+                            <th style="text-align:left;padding:0.6rem;border-bottom:1px solid #ccc">@Lang.T("Contact", "Contacto")</th>
+                            <th style="text-align:left;padding:0.6rem;border-bottom:1px solid #ccc">@Lang.T("Summary", "Resumen")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var lead in Model)
+                    {
+                        <tr>
+                            <td style="padding:0.6rem;border-bottom:1px solid #eee;vertical-align:top"><code>@lead.Id</code></td>
+                            <td style="padding:0.6rem;border-bottom:1px solid #eee;vertical-align:top">@lead.CreatedAt.ToLocalTime().ToString("g")</td>
+                            <td style="padding:0.6rem;border-bottom:1px solid #eee;vertical-align:top">
+                                <strong>@lead.Name</strong><br />
+                                @if (!string.IsNullOrWhiteSpace(lead.Email))
+                                {
+                                    <a href="mailto:@lead.Email">@lead.Email</a><br />
+                                }
+                                <a href="tel:@lead.Phone">@lead.Phone</a><br />
+                                <small>@lead.Language</small>
+                            </td>
+                            <td style="padding:0.6rem;border-bottom:1px solid #eee;vertical-align:top">
+                                @lead.Summary
+                                @if (lead.Fields.TryGetValue("details", out var details) && !string.IsNullOrWhiteSpace(details))
+                                {
+                                    <br /><small>@details</small>
+                                }
+                                @if (lead.Fields.TryGetValue("plannerRange", out var range) && !string.IsNullOrWhiteSpace(range))
+                                {
+                                    <br /><small>Planner: @range</small>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</section>
