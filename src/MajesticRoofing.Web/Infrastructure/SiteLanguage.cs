@@ -15,5 +15,18 @@ public sealed class SiteLanguage
     public string OtherCode => IsSpanish ? "en" : "es";
     public string ToggleLabel => IsSpanish ? "EN" : "ES";
 
-    public string T(string english, string spanish) => IsSpanish ? spanish : english;
+    public string T(string english, string? spanish = null)
+    {
+        if (!IsSpanish)
+        {
+            return english;
+        }
+
+        if (!string.IsNullOrEmpty(spanish))
+        {
+            return spanish;
+        }
+
+        return CopyCatalog.Es.TryGetValue(english, out var mapped) ? mapped : english;
+    }
 }

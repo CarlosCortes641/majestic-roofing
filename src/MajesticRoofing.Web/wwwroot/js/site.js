@@ -48,10 +48,12 @@
         rangeEl.innerHTML = `${money(result.low)} <i>—</i> ${money(result.high)}`;
       }
       if (areaEl) {
-        const label = areaEl.textContent.includes("Área") || areaEl.textContent.includes("estimada")
-          ? "Área estimada del techo"
-          : "Estimated roof area";
-        areaEl.textContent = `${label}: ${Math.round(result.area).toLocaleString()} sq ft · ${result.squares.toFixed(1)} squares`;
+        const es = document.documentElement.lang === "es";
+        const label = es ? "Área estimada del techo" : "Estimated roof area";
+        const units = es
+          ? `${Math.round(result.area).toLocaleString()} pie² · ${result.squares.toFixed(1)} cuadrados`
+          : `${Math.round(result.area).toLocaleString()} sq ft · ${result.squares.toFixed(1)} squares`;
+        areaEl.textContent = `${label}: ${units}`;
       }
       document.querySelectorAll("[data-planner-range]").forEach((input) => {
         input.value = `${Math.round(result.low)}-${Math.round(result.high)}`;

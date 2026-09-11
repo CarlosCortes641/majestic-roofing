@@ -70,18 +70,52 @@
         @RenderBody()
     </main>
 
+    @{
+        var isOps = Context.Request.Path.StartsWithSegments("/ops", StringComparison.OrdinalIgnoreCase);
+    }
+    @if (!isOps)
+    {
+        @await Html.PartialAsync("_SiteClosing")
+    }
+
     <footer class="site-footer">
         <div class="site-shell footer-top">
-            <a class="brand brand-footer" href="/">
-                <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
-                <span><strong>MAJESTIC</strong><small>ROOFING, INC.</small></span>
-            </a>
-            <p>@Lang.T("Roof replacement • repairs • storm documentation • emergency tarping • gutters • fascia · roof insurance claim documentation", "Reemplazo • reparaciones • documentación de tormentas • tarps de emergencia • canaletas • fascia · documentación de reclamos")</p>
-            <a class="footer-phone" href="tel:@SiteInfo.PhoneTel">@SiteInfo.PhoneDisplay</a>
+            <div class="footer-brand">
+                <a class="brand brand-footer" href="/">
+                    <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+                    <span><strong>MAJESTIC</strong><small>ROOFING, INC.</small></span>
+                </a>
+                <p>@Lang.T("Roof replacement, repairs, storm documentation, emergency tarping, gutters and fascia across Charlotte and Rock Hill.", "Reemplazo, reparaciones, documentación de tormentas, tarps de emergencia, canaletas y fascia en Charlotte y Rock Hill.")</p>
+                <a class="footer-email" href="mailto:@SiteInfo.Email">@SiteInfo.Email</a>
+            </div>
+            <div class="footer-links">
+                <div>
+                    <p>@Lang.T("Explore", "Explorar")</p>
+                    <a href="@(isHome ? "#services" : "/#services")">@Lang.T("Services", "Servicios")</a>
+                    <a href="@(isHome ? "#planner" : "/#planner")">@Lang.T("Price planner", "Calculadora")</a>
+                    <a href="/roofing-systems-charlotte-nc">@Lang.T("Roofing systems", "Sistemas de techo")</a>
+                    <a href="@(isHome ? "#contact" : "/#contact")">@Lang.T("Contact", "Contacto")</a>
+                </div>
+                <div>
+                    <p>@Lang.T("Storm damage", "Daño por tormenta")</p>
+                    <a href="/roof-insurance-claim-charlotte-nc">@Lang.T("Insurance claim", "Reclamo de seguro")</a>
+                    <a href="/hail-damage-roof-inspection-charlotte-nc">@Lang.T("Hail inspection", "Inspección de granizo")</a>
+                    <a href="/wind-missing-shingles-repair-charlotte-nc">@Lang.T("Wind / missing shingles", "Viento / shingles faltantes")</a>
+                    <a href="/active-roof-leak-repair-charlotte-nc">@Lang.T("Active leak", "Gota activa")</a>
+                </div>
+                <div>
+                    <p>@Lang.T("Contact", "Contacto")</p>
+                    <a href="tel:@SiteInfo.PhoneTel">@Lang.T("Call", "Llamar") @SiteInfo.PhoneDisplay</a>
+                    <a href="mailto:@SiteInfo.Email">Email</a>
+                    <a href="/roofing-charlotte-nc">Charlotte, NC</a>
+                    <a href="/roofing-rock-hill-sc">Rock Hill, SC</a>
+                    <a href="/ops">@Lang.T("Ops / leads", "Ops / leads")</a>
+                </div>
+            </div>
         </div>
         <div class="site-shell footer-bottom">
             <span>© @DateTime.UtcNow.Year Majestic Roofing, Inc.</span>
-            <span>Charlotte, NC · Rock Hill, SC · @Lang.T("Coverage confirmed by address", "Cobertura confirmada por dirección") · <a href="/ops">Ops</a></span>
+            <span>@Lang.T("Sandbox website. Leads stay in memory only.", "Website sandbox. Los leads solo viven en memoria.")</span>
         </div>
     </footer>
     <script src="~/js/site.js" asp-append-version="true"></script>

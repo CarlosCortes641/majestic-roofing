@@ -1,0 +1,36 @@
+@{
+    var isHome = Context.Request.Path == "/" || string.Equals(Context.Request.Path, "/Home", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(Context.Request.Path, "/Home/Index", StringComparison.OrdinalIgnoreCase);
+    var contactHref = isHome ? "#contact" : "/#contact";
+    var title = ViewData["ClosingTitle"] as string ?? Lang.T(
+        "Clear evidence. Clear next step.",
+        "Evidencia clara. Próximo paso claro.");
+    var body = ViewData["ClosingBody"] as string ?? Lang.T(
+        "Free inspection. Storm documentation. Professional roofing.",
+        "Inspección gratis. Documentación de tormenta. Techado profesional.");
+    var primary = ViewData["ClosingPrimary"] as string ?? Lang.T("Get help", "Pedir ayuda");
+    var primaryHref = ViewData["ClosingPrimaryHref"] as string ?? contactHref;
+    var secondary = ViewData["ClosingSecondary"] as string ?? Lang.T("Call Majestic", "Llamar a Majestic");
+    var secondaryHref = ViewData["ClosingSecondaryHref"] as string ?? $"tel:{SiteInfo.PhoneTel}";
+    var micro = ViewData["ClosingMicro"] as string ?? Lang.T(
+        "Charlotte, NC · Rock Hill, SC · Coverage confirmed by address.",
+        "Charlotte, NC · Rock Hill, SC · Cobertura confirmada por dirección.");
+}
+<section class="closing" aria-labelledby="closing-title">
+    <div class="closing-inner">
+        <p class="closing-mark" aria-hidden="true">MAJESTIC</p>
+        <h2 id="closing-title">@title</h2>
+        @if (!string.IsNullOrWhiteSpace(body))
+        {
+            <p class="closing-body">@body</p>
+        }
+        <div class="closing-actions">
+            <a class="button closing-primary" href="@primaryHref">@primary <span aria-hidden="true">→</span></a>
+            <a class="closing-link" href="@secondaryHref">@secondary <span aria-hidden="true">↗</span></a>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(micro))
+        {
+            <small class="closing-micro">@micro</small>
+        }
+    </div>
+</section>
