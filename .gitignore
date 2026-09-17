@@ -7,3 +7,6 @@ obj/
 appsettings.*.local.json
 .DS_Store
 .proto-cache/
+*.PublishSettings
+**/Properties/PublishProfiles/*.pubxml
+**/Properties/PublishProfiles/*.pubxml.user

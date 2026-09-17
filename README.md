@@ -27,13 +27,21 @@ Abre `http://localhost:5130`.
 
 **No activado:** CRM, email transaccional, ni envío real a la aseguradora.
 
+## Publicar (Azure App Service)
+
+Cada push a `main` despliega con GitHub Actions (`.github/workflows/deploy-azure.yml`).
+
+1. En Azure Portal → App Service `roofing` → **Get publish profile** → descarga el `.PublishSettings`
+2. En GitHub → repo → **Settings → Secrets and variables → Actions** → New repository secret:
+   - Name: `AZURE_WEBAPP_PUBLISH_PROFILE`
+   - Value: pega el contenido completo del archivo `.PublishSettings`
+3. Push a `main` (o **Actions → Deploy Majestic Roofing to Azure → Run workflow**)
+
+App URL: `https://roofing-hzhfdxf8cpazgzet.canadacentral-01.azurewebsites.net`
+
 ## Publicar (gratis en Render)
 
-1. Repo en GitHub: `CarlosCortes641/majestic-roofing`
-2. En [Render](https://dashboard.render.com/blueprint/new?repo=https://github.com/CarlosCortes641/majestic-roofing): Blueprint Name `majestic-roofing` → **Apply**
-3. Si falla por memoria (exit 139): en el servicio → **Manual Deploy** → **Clear build cache & deploy**
-
-El plan free se duerme sin tráfico; el primer request puede tardar ~30–60s.
+Alternativa: Blueprint en [Render](https://dashboard.render.com/blueprint/new?repo=https://github.com/CarlosCortes641/majestic-roofing) con `render.yaml`. El plan free se duerme sin tráfico.
 
 ## Prototipo de referencia
 
