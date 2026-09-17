@@ -1,0 +1,45 @@
+@{
+    var faqs = new (string Q, string A)[]
+    {
+        (
+            Lang.T("What is included in the $350 Roof Tune-Up?"),
+            Lang.T("It is a general annual maintenance visit for accessible roof areas. The planned scope includes a visual roof review, maintenance caulking or sealant at exposed fasteners and accessible roof penetrations, chimney water-entry details, and a review for visible roof concerns. It does not include roof replacement, hidden-condition repairs, structural work, decking, major repairs, interior repairs, or items requiring a separate scope.")
+        ),
+        (
+            Lang.T("What is the emergency tarp price?"),
+            Lang.T("The published starting emergency tarp service is $125 for one tarp up to 20 × 20 feet, subject to a safe site assessment. A larger standard tarp is $150. Multiple tarps, whole-roof coverage, unusual access, unsafe weather, steep roofs, or additional materials require a separate confirmation before work begins.")
+        ),
+        (
+            Lang.T("Can Majestic help with my insurance claim?"),
+            Lang.T("Majestic can inspect visible conditions, document the roofing project, prepare a roofing estimate or scope, and meet at the property with an adjuster when requested. Majestic does not decide coverage, guarantee claim approval, or act as a public adjuster unless separately licensed and authorized.")
+        ),
+        (
+            Lang.T("Is the price planner a final quote?"),
+            Lang.T("No. It is an early planning range based on the information you provide. Roof geometry, measurements, materials, access, code requirements, permits, decking, and hidden conditions are confirmed in person.")
+        ),
+        (
+            Lang.T("What cities do you serve?"),
+            Lang.T("Majestic serves properties approximately 90 minutes from Charlotte, NC or Rock Hill, SC. Roof and claim-related inspections do not have a travel fee. Availability is confirmed by address, and Raleigh is outside the service area.")
+        )
+    };
+    var entities = faqs.Select(f => new Dictionary<string, object?>
+    {
+        ["@type"] = "Question",
+        ["name"] = f.Q,
+        ["acceptedAnswer"] = new Dictionary<string, object?>
+        {
+            ["@type"] = "Answer",
+            ["text"] = f.A
+        }
+    }).ToList();
+    var doc = new Dictionary<string, object?>
+    {
+        ["@context"] = "https://schema.org",
+        ["@type"] = "FAQPage",
+        ["mainEntity"] = entities
+    };
+    var json = System.Text.Json.JsonSerializer.Serialize(doc);
+}
+<script type="application/ld+json">
+@Html.Raw(json)
+</script>

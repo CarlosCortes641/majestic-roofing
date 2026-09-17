@@ -2,12 +2,21 @@
     var title = ViewData["Title"] as string ?? Lang.T(
         "Majestic Roofing | Roof Insurance Claims Charlotte & Rock Hill",
         "Majestic Roofing | Reclamos de seguro de techo Charlotte y Rock Hill");
-    var returnUrl = Context.Request.Path + Context.Request.QueryString;
-    var desc = Lang.T(
+    var description = ViewData["MetaDescription"] as string ?? Lang.T(
         "Bilingual roof insurance claim documentation, free storm inspections, roof replacement, repairs, emergency tarping, gutters and fascia across Charlotte, NC and Rock Hill, SC.",
         "Documentación bilingüe de reclamos de seguro de techo, inspecciones de tormenta gratis, reemplazo, reparaciones, tarps de emergencia, canaletas y fascia en Charlotte, NC y Rock Hill, SC.");
+    var robots = ViewData["Robots"] as string ?? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1";
+    var ogType = ViewData["OgType"] as string ?? "website";
+    var returnUrl = Context.Request.Path + Context.Request.QueryString;
+    var baseUrl = PublicUrl.Base(Context.Request);
+    var path = string.IsNullOrEmpty(Context.Request.Path.Value) ? "/" : Context.Request.Path.Value!;
+    var canonical = path == "/" ? baseUrl + "/" : baseUrl + path;
+    var locale = Lang.IsSpanish ? "es_US" : "en_US";
+    var localeAlt = Lang.IsSpanish ? "en_US" : "es_US";
+    var ogImage = ViewData["OgImage"] as string ?? baseUrl + "/img/projects/roof-project-11.jpeg";
     var isHome = Context.Request.Path == "/" || string.Equals(Context.Request.Path, "/Home", StringComparison.OrdinalIgnoreCase)
         || string.Equals(Context.Request.Path, "/Home/Index", StringComparison.OrdinalIgnoreCase);
+    var isOps = Context.Request.Path.StartsWithSegments("/ops", StringComparison.OrdinalIgnoreCase);
 }
 <!DOCTYPE html>
 <html lang="@Lang.HtmlLang">
@@ -15,7 +24,31 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@title</title>
-    <meta name="description" content="@desc" />
+    <meta name="description" content="@description" />
+    <meta name="robots" content="@robots" />
+    <meta name="author" content="@SiteInfo.Name" />
+    <meta name="geo.region" content="US-NC" />
+    <meta name="geo.placename" content="Charlotte" />
+    <meta name="geo.position" content="35.2271;-80.8431" />
+    <meta name="ICBM" content="35.2271, -80.8431" />
+    <link rel="canonical" href="@canonical" />
+    <link rel="alternate" hreflang="en" href="@canonical" />
+    <link rel="alternate" hreflang="es" href="@canonical" />
+    <link rel="alternate" hreflang="x-default" href="@canonical" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="@baseUrl/sitemap.xml" />
+    <meta property="og:type" content="@ogType" />
+    <meta property="og:site_name" content="@SiteInfo.ShortName" />
+    <meta property="og:locale" content="@locale" />
+    <meta property="og:locale:alternate" content="@localeAlt" />
+    <meta property="og:title" content="@title" />
+    <meta property="og:description" content="@description" />
+    <meta property="og:url" content="@canonical" />
+    <meta property="og:image" content="@ogImage" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@title" />
+    <meta name="twitter:description" content="@description" />
+    <meta name="twitter:image" content="@ogImage" />
+    <meta name="theme-color" content="#17324d" />
     <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
@@ -45,6 +78,7 @@
             </nav>
             <div class="header-actions">
                 <a class="language-toggle" href="@Url.Action("Set", "Language", new { code = Lang.OtherCode, returnUrl })">@Lang.ToggleLabel</a>
+                <a class="header-phone" href="tel:@SiteInfo.PhoneTel" aria-label="@Lang.T("Call Majestic", "Llamar a Majestic") @SiteInfo.PhoneDisplay">@SiteInfo.PhoneDisplay</a>
                 <a class="button button-small" href="@(isHome ? "#contact" : "/#contact")">@Lang.T("Get help", "Pedir ayuda")</a>
             </div>
         </div>
@@ -70,12 +104,14 @@
         @RenderBody()
     </main>
 
-    @{
-        var isOps = Context.Request.Path.StartsWithSegments("/ops", StringComparison.OrdinalIgnoreCase);
-    }
     @if (!isOps)
     {
         @await Html.PartialAsync("_SiteClosing")
+        @await Html.PartialAsync("_JsonLd")
+    }
+    @if (isHome)
+    {
+        @await Html.PartialAsync("_FaqJsonLd")
     }
 
     <footer class="site-footer">

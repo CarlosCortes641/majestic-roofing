@@ -171,3 +171,19 @@
   .footer-links{grid-template-columns:1fr}
   .site-footer .footer-bottom{flex-direction:column;align-items:flex-start;justify-content:flex-start}
 }
+
+/* === header phone (Safe Project pattern) === */
+.header-phone{
+  color:var(--blue);
+  font-size:.86rem;
+  font-weight:900;
+  letter-spacing:.01em;
+  white-space:nowrap;
+  padding:.35rem 0
+}
+.header-phone:hover{
+  color:var(--blue-deep)
+}
+@media (width<=760px){
+  .header-phone{font-size:.72rem}
+}

@@ -1,0 +1,7 @@
+@{
+    var siteUrl = PublicUrl.Base(Context.Request);
+    var jsonLd = SiteJsonLd.Business(siteUrl);
+}
+<script type="application/ld+json">
+@Html.Raw(jsonLd)
+</script>
