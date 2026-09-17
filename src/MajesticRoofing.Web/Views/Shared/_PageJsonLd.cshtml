@@ -1,0 +1,27 @@
+@{
+    var siteUrl = PublicUrl.Base(Context.Request);
+    var path = string.IsNullOrEmpty(Context.Request.Path.Value) ? "/" : Context.Request.Path.Value!;
+    var title = ViewData["Title"] as string ?? SiteInfo.ShortName;
+    var description = ViewData["MetaDescription"] as string
+        ?? Lang.T(
+            "Roofing services from Majestic Roofing in Charlotte, NC and Rock Hill, SC.",
+            "Servicios de techo de Majestic Roofing en Charlotte, NC y Rock Hill, SC.");
+    var crumbName = ViewData["BreadcrumbName"] as string ?? title.Split('|')[0].Trim();
+    var areaName = ViewData["SeoAreaName"] as string;
+    var areaRegion = ViewData["SeoAreaRegion"] as string;
+
+    var breadcrumbJson = SiteJsonLd.Breadcrumb(siteUrl, (crumbName, path));
+    var serviceJson = SiteJsonLd.ServicePage(siteUrl, crumbName, description, path, areaName, areaRegion);
+}
+<script type="application/ld+json">
+@Html.Raw(breadcrumbJson)
+</script>
+<script type="application/ld+json">
+@Html.Raw(serviceJson)
+</script>
+@if (ViewData["HowToJsonLd"] is string howTo && !string.IsNullOrWhiteSpace(howTo))
+{
+<script type="application/ld+json">
+@Html.Raw(howTo)
+</script>
+}

@@ -140,6 +140,121 @@ public static class SiteJsonLd
         return JsonSerializer.Serialize(doc, Options);
     }
 
+    public static string Breadcrumb(string siteUrl, params (string Name, string Path)[] crumbs)
+    {
+        var root = siteUrl.TrimEnd('/');
+        var items = new List<object>();
+        var position = 1;
+        items.Add(new Dictionary<string, object?>
+        {
+            ["@type"] = "ListItem",
+            ["position"] = position++,
+            ["name"] = "Home",
+            ["item"] = root + "/"
+        });
+        foreach (var (name, path) in crumbs)
+        {
+            var loc = path.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                ? path
+                : root + (path.StartsWith('/') ? path : "/" + path);
+            items.Add(new Dictionary<string, object?>
+            {
+                ["@type"] = "ListItem",
+                ["position"] = position++,
+                ["name"] = name,
+                ["item"] = loc
+            });
+        }
+
+        var doc = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "BreadcrumbList",
+            ["itemListElement"] = items
+        };
+        return JsonSerializer.Serialize(doc, Options);
+    }
+
+    public static string ServicePage(
+        string siteUrl,
+        string name,
+        string description,
+        string path,
+        string? areaName = null,
+        string? areaRegion = null)
+    {
+        var root = siteUrl.TrimEnd('/');
+        var url = path == "/" ? root + "/" : root + path;
+        var area = new List<object>();
+        if (areaName is null)
+        {
+            area.Add(new Dictionary<string, object?> { ["@type"] = "City", ["name"] = "Charlotte" });
+            area.Add(new Dictionary<string, object?> { ["@type"] = "City", ["name"] = "Rock Hill" });
+        }
+        else
+        {
+            var city = new Dictionary<string, object?>
+            {
+                ["@type"] = "City",
+                ["name"] = areaName
+            };
+            if (!string.IsNullOrWhiteSpace(areaRegion))
+            {
+                city["containedInPlace"] = new Dictionary<string, object?>
+                {
+                    ["@type"] = "State",
+                    ["name"] = areaRegion
+                };
+            }
+
+            area.Add(city);
+        }
+
+        var doc = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "Service",
+            ["name"] = name,
+            ["description"] = description,
+            ["url"] = url,
+            ["provider"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "RoofingContractor",
+                ["name"] = SiteInfo.ShortName,
+                ["telephone"] = SiteInfo.PhoneTel,
+                ["url"] = root + "/"
+            },
+            ["areaServed"] = area,
+            ["serviceType"] = "Roofing",
+            ["availableChannel"] = new Dictionary<string, object?>
+            {
+                ["@type"] = "ServiceChannel",
+                ["serviceUrl"] = url,
+                ["servicePhone"] = SiteInfo.PhoneTel
+            }
+        };
+        return JsonSerializer.Serialize(doc, Options);
+    }
+
+    public static string HowTo(string name, string description, params (string Name, string Text)[] steps)
+    {
+        var doc = new Dictionary<string, object?>
+        {
+            ["@context"] = "https://schema.org",
+            ["@type"] = "HowTo",
+            ["name"] = name,
+            ["description"] = description,
+            ["step"] = steps.Select((s, i) => new Dictionary<string, object?>
+            {
+                ["@type"] = "HowToStep",
+                ["position"] = i + 1,
+                ["name"] = s.Name,
+                ["text"] = s.Text
+            }).ToList()
+        };
+        return JsonSerializer.Serialize(doc, Options);
+    }
+
     private static Dictionary<string, object?> Offer(string name, string url) => new()
     {
         ["@type"] = "Offer",

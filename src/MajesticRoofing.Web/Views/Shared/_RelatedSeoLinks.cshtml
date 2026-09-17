@@ -1,0 +1,45 @@
+@{
+    var path = Context.Request.Path.Value ?? "/";
+}
+<section class="seo-related section" aria-labelledby="seo-related-title">
+    <div class="site-shell">
+        <p class="eyebrow">@Lang.T("Keep exploring", "Sigue explorando")</p>
+        <h2 id="seo-related-title">@Lang.T("Related roofing pages", "Páginas de techado relacionadas")</h2>
+        <div class="seo-related-grid">
+            @if (!path.Contains("roof-insurance-claim", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/roof-insurance-claim-charlotte-nc">@Lang.T("Roof insurance claim documentation", "Documentación de reclamo de seguro")</a>
+            }
+            @if (!path.Contains("roofing-charlotte", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/roofing-charlotte-nc">@Lang.T("Roofing in Charlotte, NC", "Techado en Charlotte, NC")</a>
+            }
+            @if (!path.Contains("roofing-rock-hill", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/roofing-rock-hill-sc">@Lang.T("Roofing in Rock Hill, SC", "Techado en Rock Hill, SC")</a>
+            }
+            @if (!path.Contains("roofing-systems", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/roofing-systems-charlotte-nc">@Lang.T("Roofing systems", "Sistemas de techo")</a>
+            }
+            @if (!path.Contains("hail-damage", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/hail-damage-roof-inspection-charlotte-nc">@Lang.T("Hail damage inspection", "Inspección por granizo")</a>
+            }
+            @if (!path.Contains("wind-missing", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/wind-missing-shingles-repair-charlotte-nc">@Lang.T("Wind / missing shingles", "Viento / shingles faltantes")</a>
+            }
+            @if (!path.Contains("active-roof-leak", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/active-roof-leak-repair-charlotte-nc">@Lang.T("Active leak repair", "Reparación de gota activa")</a>
+            }
+            @if (!path.Contains("tree-roof-damage", StringComparison.OrdinalIgnoreCase))
+            {
+                <a href="/tree-roof-damage-charlotte-nc">@Lang.T("Tree roof damage", "Daño de árbol en el techo")</a>
+            }
+            <a href="/#contact">@Lang.T("Request an inspection", "Solicitar inspección")</a>
+            <a href="tel:@SiteInfo.PhoneTel">@Lang.T("Call", "Llamar") @SiteInfo.PhoneDisplay</a>
+        </div>
+    </div>
+</section>
